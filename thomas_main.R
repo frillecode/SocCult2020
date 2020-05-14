@@ -1,13 +1,14 @@
 # imports
-install.packages("brms")
-install.packages('pacman', repos='https://cran.uni-muenster.de/')
-setRepositories()
-
+library(pacman)
 pacman::p_load(brms, gplots)
-source("util.R")
+source("util1.r")
 source("simulation.R")
-source("analysis1.R")
-source("contours.R")
+source("analysis1.r")
+source("Plotting/contours.R")
+
+
+#####
+number <- 3
 
 
 ###            ###
@@ -26,7 +27,7 @@ source("contours.R")
 b_bases <- c(0)
 b_sexs <- c(0)
 b_conds <- c(0)
-b_sex_conds <- c(0, 0.5, 1, 1.5, 2)
+b_sex_conds <- c(0.5, 1)
 var_bases <- c(0.5)
 var_sexs <- c(0)
 var_conds <- c(0)
@@ -37,11 +38,11 @@ var_sex_conds <- c(0)
 # parameter values given in the "True values" setction above.
 # Warning! n_participants_per_experiment and n_people need to 
 # be divisible by 4!
-n_repeats <- 1
-n_experiments_per_repeat <- 60
+n_repeats <- 3
+n_experiments_per_repeat <- 10
 n_participants_per_experiment <- 80
 n_trials_per_participant <- 25
-n_people <- 100
+n_people <- 100000
 
 total_simulations <- length(b_bases) * length(b_sexs) * length(b_conds) * length(b_sex_conds) * length(var_bases) * length(var_sexs) * length(var_conds) * length(var_sex_conds) * n_repeats
 current_simulation <- 1
@@ -52,7 +53,7 @@ current_simulation <- 1
 do_anova <- F
 do_glmm <- F
 do_bglmm <- TRUE
-de_bskep <- TRUE
+do_bskep <- TRUE
 do_pp <- TRUE
 do_mega_bglmm <- F
 
@@ -160,6 +161,17 @@ for (i in 1:length(b_bases)) {
               # This function is in analysis1.R
               # makes a meta-analysis for outputs of b-skep for each repeat
               meta_analysis <- do_meta_analysis(max_distance = 0.5)
+              
+              ###
+              ### Save results for each value of b_sex_conds
+              ###
+              if(exists("saved_results_final")){
+                saved_results_final <- merge(saved_results, saved_results_final)
+                meta_analysis_final <- merge(meta_analysis, meta_analysis_final)
+              } else {
+                saved_results_final <- saved_results
+                meta_analysis_final <- meta_analysis
+              }
               }
             }
           }
@@ -173,10 +185,9 @@ meta_results <- compile_meta_results()
 #meta_results <- read.delim("meta_results_18_09_16.txt")
 
 #save results
-number <- 1
-saved <- paste("results/saved_results_", number, ".csv", sep = "") 
-meta_a <- paste("results/meta_analysis_results_", number, ".csv", sep = "")
-meta <- paste("results/meta_results_", number, ".csv", sep = "")
+saved <- paste("Results/saved_results_", number, ".csv", sep = "") 
+meta_a <- paste("Results/meta_analysis_results_", number, ".csv", sep = "")
+meta <- paste("Results/meta_results_", number, ".csv", sep = "")
 write.csv(saved_results, saved)
 write.csv(meta_analysis, meta_a)
 write.csv(meta_results, meta)

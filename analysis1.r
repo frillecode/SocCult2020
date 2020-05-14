@@ -115,7 +115,7 @@ do_analyses_1 <- function(max_distance) {
     
     #set initial prior for beta[4]
     pp_u <<- 0
-    pp_sig <<- 1
+    pp_sig <<- 0.1
     x <- paste("normal(", pp_u, ",", pp_sig, ")", sep = "")
     
     for (experiment in 1:n_experiments_per_repeat) {
@@ -187,12 +187,14 @@ do_analyses_1 <- function(max_distance) {
 
 do_meta_analysis <- function(max_distance) {
   #define vectors
-  meta_repeat_id <<- vector()
-  n_exp <<- vector()
+  meta_repeat_id <- vector()
+  n_exp <- vector()
+  true_effect <- vector()
   
-  b_sex_cond_meta <<- vector()
-  b_sex_cond_lower_meta <<- vector()
-  b_sex_cond_upper_meta <<- vector()
+  b_sex_cond_meta <- vector()
+  b_sex_cond_lower_meta <- vector()
+  b_sex_cond_upper_meta <- vector()
+  b_sex_cond_error_meta <- vector()
   
   #only for bskep
   meta_data <- saved_results[saved_results$analysis_type == "bskep",]
@@ -232,19 +234,23 @@ do_meta_analysis <- function(max_distance) {
     )
     
     #save results
-    b_sex_cond_meta <<- c(b_sex_cond_meta, fixef(model)[,1][[1]])
+    b_sex_cond_meta <- c(b_sex_cond_meta, fixef(model)[,1][[1]])
     
-    b_sex_cond_lower_meta <<- c(b_sex_cond_lower_meta, fixef(model)[,3][[1]])
+    b_sex_cond_error_meta <- c(b_sex_cond_upper_meta, fixef(model)[,2][[1]])
     
-    b_sex_cond_upper_meta <<- c(b_sex_cond_upper_meta, fixef(model)[,4][[1]])
+    b_sex_cond_lower_meta <- c(b_sex_cond_lower_meta, fixef(model)[,3][[1]])
     
-    meta_repeat_id <<- c(meta_repeat_id, rep)
+    b_sex_cond_upper_meta <- c(b_sex_cond_upper_meta, fixef(model)[,4][[1]])
     
-    n_exp <<- c(n_exp, length(this_meta_data$expt))
+    meta_repeat_id <- c(meta_repeat_id, rep)
+    
+    n_exp <- c(n_exp, length(this_meta_data$expt))
+    
+    true_effect <- c(true_effect, this_meta_data$true_sex_cond[1])
   }
   
   #save all results
-  return(data.frame(meta_repeat_id, n_exp, 
-                    b_sex_cond_meta, b_sex_cond_lower_meta, b_sex_cond_upper_meta))
+  return(data.frame(meta_repeat_id, n_exp, true_effect,
+                    b_sex_cond_meta, b_sex_cond_lower_meta, b_sex_cond_upper_meta, b_sex_cond_error_meta))
   
 }
