@@ -1,5 +1,8 @@
 # imports
-library(pacman)
+install.packages("brms")
+install.packages('pacman', repos='https://cran.uni-muenster.de/')
+setRepositories()
+
 pacman::p_load(brms, gplots)
 source("util.R")
 source("simulation.R")
