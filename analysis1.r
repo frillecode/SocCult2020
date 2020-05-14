@@ -1,6 +1,3 @@
-#library(brms)
-#get_prior(model_f, data = data_sets[data_sets$data_set == 1,], family = gaussian())
-
 do_analyses_1 <- function(max_distance) {
   print(">>>>>>>> Doing analyses")
   
@@ -22,12 +19,11 @@ do_analyses_1 <- function(max_distance) {
       model <- brm(
         formula = model_f,
         data = this_data_set,
-        family = gaussian,
         prior = prior_m,
-        sample_prior = T,
-        chains = 2,
-        cores = 2
+        family = gaussian,
+        sample_prior = T
       )
+      
       
       # save the results of the glmm
       b_base_med <<- c(b_base_med, fixef(model)[,1][[1]])
@@ -44,6 +40,11 @@ do_analyses_1 <- function(max_distance) {
       b_sex_upper <<- c(b_sex_upper, fixef(model)[,4][[2]])
       b_cond_upper <<- c(b_cond_upper, fixef(model)[,4][[3]])
       b_sex_cond_upper <<- c(b_sex_cond_upper, fixef(model)[,4][[4]])
+      
+      b_base_error <<- c(b_base_error, fixef(model)[,2][[1]])
+      b_sex_error <<- c(b_sex_error, fixef(model)[,2][[2]])
+      b_cond_error <<- c(b_cond_error, fixef(model)[,2][[3]])
+      b_sex_cond_error <<- c(b_sex_cond_error, fixef(model)[,2][[4]])
       
       b_sex_p_value <<- c(b_sex_p_value, NaN)
       b_cond_p_value <<- c(b_cond_p_value, NaN)
@@ -67,7 +68,7 @@ do_analyses_1 <- function(max_distance) {
       prior_m <- c(
         prior(normal(0.5, 0.1), class = Intercept), 
         prior(normal(0, 0.1), class = b),
-        prior(normal(0, 0.1), class = sd), 
+        prior(normal(0, 0.1), class = sd),
         prior(normal(0.5, 0.1), class = sigma)
       )
       
@@ -76,9 +77,7 @@ do_analyses_1 <- function(max_distance) {
         data = this_data_set,
         family = gaussian,
         prior = prior_m,
-        sample_prior = T,
-        chains = 2,
-        cores = 2
+        sample_prior = T
       )
       
       # save the results of the glmm
@@ -96,6 +95,11 @@ do_analyses_1 <- function(max_distance) {
       b_sex_upper <<- c(b_sex_upper, fixef(model)[,4][[2]])
       b_cond_upper <<- c(b_cond_upper, fixef(model)[,4][[3]])
       b_sex_cond_upper <<- c(b_sex_cond_upper, fixef(model)[,4][[4]])
+      
+      b_base_error <<- c(b_base_error, fixef(model)[,2][[1]])
+      b_sex_error <<- c(b_sex_error, fixef(model)[,2][[2]])
+      b_cond_error <<- c(b_cond_error, fixef(model)[,2][[3]])
+      b_sex_cond_error <<- c(b_sex_cond_error, fixef(model)[,2][[4]])
       
       b_sex_p_value <<- c(b_sex_p_value, NaN)
       b_cond_p_value <<- c(b_cond_p_value, NaN)
@@ -111,7 +115,7 @@ do_analyses_1 <- function(max_distance) {
     
     #set initial prior for beta[4]
     pp_u <<- 0
-    pp_prec <<- 10                              #REMEMBER TO change in saras code
+    pp_sig <<- 1
     x <- paste("normal(", pp_u, ",", pp_sig, ")", sep = "")
     
     for (experiment in 1:n_experiments_per_repeat) {
@@ -119,12 +123,12 @@ do_analyses_1 <- function(max_distance) {
       model_f <- bf(response ~ sex * condition + (1|participant_id))
       
       prior_m <- c(
-        prior(normal(x,x), class = Intercept), 
+        prior(normal(0.5, 0.1), class = Intercept), 
         prior_string(x, class = "b", coef = "sex:condition"),
-        prior(normal(0,x), class = b, coef = "sex"),
-        prior(normal(0,x), class = b, coef = "condition"),
-        prior(normal(0,x), class = sd),
-        prior(normal(), class = sigma)
+        prior(normal(0,0.1), class = b, coef = "sex"),
+        prior(normal(0,0.1), class = b, coef = "condition"),
+        prior(normal(0,0.1), class = sd),
+        prior(normal(0.5,0.1), class = sigma)
       )
       
       model <- brm(
@@ -132,9 +136,7 @@ do_analyses_1 <- function(max_distance) {
         data = this_data_set,
         family = gaussian,
         prior = prior_m,
-        sample_prior = T,
-        chains = 2,
-        cores = 2
+        sample_prior = T
       )
       
       # save the results of the glmm
@@ -153,6 +155,11 @@ do_analyses_1 <- function(max_distance) {
       b_cond_upper <<- c(b_cond_upper, fixef(model)[,4][[3]])
       b_sex_cond_upper <<- c(b_sex_cond_upper, fixef(model)[,4][[4]])
       
+      b_base_error <<- c(b_base_error, fixef(model)[,2][[1]])
+      b_sex_error <<- c(b_sex_error, fixef(model)[,2][[2]])
+      b_cond_error <<- c(b_cond_error, fixef(model)[,2][[3]])
+      b_sex_cond_error <<- c(b_sex_cond_error, fixef(model)[,2][[4]])
+      
       b_sex_p_value <<- c(b_sex_p_value, NaN)
       b_cond_p_value <<- c(b_cond_p_value, NaN)
       b_sex_cond_p_value <<- c(b_sex_cond_p_value, NaN)
@@ -160,8 +167,8 @@ do_analyses_1 <- function(max_distance) {
       # update the priors for the next run
       if (publication_bias == TRUE){
         pb_prob <- ifelse(fixef(model)[,1][[4]] >= max_distance, 
-                          1, 
-                          fixef(model)[,1][[4]]/max_distance)
+                       1, 
+                       fixef(model)[,1][[4]]/max_distance)
         pb <- rbinom(1, size = 1, prob = pb_prob)
         pp_u[1] <<- ifelse(pb == 1,
                            fixef(model)[,1][[4]],
@@ -177,3 +184,67 @@ do_analyses_1 <- function(max_distance) {
   }# end of do pp
 }
 
+
+do_meta_analysis <- function(max_distance) {
+  #define vectors
+  meta_repeat_id <<- vector()
+  n_exp <<- vector()
+  
+  b_sex_cond_meta <<- vector()
+  b_sex_cond_lower_meta <<- vector()
+  b_sex_cond_upper_meta <<- vector()
+  
+  #only for bskep
+  meta_data <- saved_results[saved_results$analysis_type == "bskep",]
+  
+  for (rep in 1:n_repeats) {
+    #one meta analysis pr repeat
+    this_meta_data <- meta_data[meta_data$repeat_id == rep,]
+    
+    #publication bias
+    if(publication_bias == TRUE){
+      for (exp in 1:n_experiments_per_repeat){
+        pb_prob <- ifelse(this_meta_data[this_meta_data$expt == exp,]$b_sex_cond_med >= max_distance, 
+                          1, 
+                          this_meta_data$b_sex_cond_med/max_distance)
+        pb <- rbinom(1, size = 1, prob = pb_prob)
+        if(pb == 0){
+          this_meta_data <- this_meta_data %>% 
+            filter(!(expt == exp))
+        }
+      }
+    } 
+    
+    #do meta analysis
+    meta_f <- bf(b_sex_cond_med | se(b_sex_cond_error) ~ 1 + (1 | expt)) 
+    
+    prior_meta <- c(
+      prior(normal(0,0.1), class = Intercept),
+      prior(normal(0.1,0.1), class = sd)
+    )
+    
+    model <- brm(
+      formula = meta_f,
+      data = this_meta_data,
+      family = gaussian,
+      prior = prior_meta,
+      sample_prior = T
+    )
+    
+    #save results
+    b_sex_cond_meta <<- c(b_sex_cond_meta, fixef(model)[,1][[1]])
+    
+    b_sex_cond_lower_meta <<- c(b_sex_cond_lower_meta, fixef(model)[,3][[1]])
+    
+    b_sex_cond_upper_meta <<- c(b_sex_cond_upper_meta, fixef(model)[,4][[1]])
+    
+    meta_repeat_id <<- c(meta_repeat_id, rep)
+    
+    n_exp <<- c(n_exp, length(this_meta_data$expt))
+  }
+  
+  #save all results
+  return(data.frame(meta_repeat_id, n_exp, 
+                    b_sex_cond_meta, b_sex_cond_lower_meta, b_sex_cond_upper_meta))
+  
+}
