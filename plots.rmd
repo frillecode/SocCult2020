@@ -1,0 +1,75 @@
+---
+title: "Plots"
+author: "Sara Østergaard"
+date: "13 maj 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+### Load Packages and data
+```{r}
+library(pacman)
+pacman::p_load(
+  tidyverse,
+  gridExtra
+)
+
+#data
+d13 <- read_csv("Results/saved_results_13.csv")
+d11 <- read_csv("Results/saved_results_11.csv")
+d10 <- read_csv("Results/saved_results_10.csv")
+d15 <- read_csv("Results/saved_results_15.csv")
+
+#transform data
+# d$b_sex_cond_med <- exp(d$b_sex_cond_med)/ (1 + exp(d$b_sex_cond_med))
+# d$b_sex_cond_upper <- exp(d$b_sex_cond_upper)/ (1 + exp(d$b_sex_cond_upper))
+# d$b_sex_cond_lower <- exp(d$b_sex_cond_lower)/ (1 + exp(d$b_sex_cond_lower))
+
+# d$b_sex_cond_med <- log(d$b_sex_cond_med/(1-d$b_sex_cond_med))
+
+
+d11$expt <- as.numeric(d11$expt)
+d13$expt <- as.numeric(d13$expt)
+```
+
+### Plots
+```{r}
+#for first repeat only
+d1 <- d[d$repeat_id == 1,]
+
+no_pb_plot <- ggplot(data = d13) + 
+  geom_point(aes(x = expt, y = b_sex_cond_med, color = analysis_type), size = 1.5) +
+  geom_errorbar(aes(x = expt, ymax = b_sex_cond_upper, ymin = b_sex_cond_lower, color = analysis_type, width = 0.2), alpha = 0.5) +
+  geom_line(aes(x = as.numeric(expt), y = (boot::inv.logit(true_sex_cond) - boot::inv.logit(true_base))), 
+            color = 'black', size = 1) +
+  scale_color_manual(values=c("cyan4", "darkgoldenrod1", "darkorchid1")) +
+  labs(x = "Experiment number", y = "Interaction Estimate", color = "Analysis Type") +
+  theme_minimal()
+
+pb_plot <- ggplot(data = d10) + 
+  geom_point(aes(x = expt, y = b_sex_cond_med, color = analysis_type), size = 1.5) +
+  geom_errorbar(aes(x = expt, ymax = b_sex_cond_upper, ymin = b_sex_cond_lower, color = analysis_type, width = 0.2), alpha = 0.5) +
+  geom_line(aes(x = as.numeric(expt), y = (boot::inv.logit(true_sex_cond) - boot::inv.logit(true_base))), 
+            color = 'black', size = 1) +
+  scale_color_manual(values=c("cyan4", "darkgoldenrod1", "darkorchid1")) +
+  labs(x = "Experiment number", y = "Interaction Estimate", color = "Analysis Type") +
+  theme_minimal()
+
+gridExtra::grid.arrange(no_pb_plot, pb_plot)
+
+
+ggplot(data = saved_results) + 
+  geom_point(aes(x = expt, y = b_sex_cond_med, color = analysis_type), size = 1.5) +
+  geom_errorbar(aes(x = expt, ymax = b_sex_cond_upper, ymin = b_sex_cond_lower, color = analysis_type, width = 0.2), alpha = 0.5) +
+  geom_line(aes(x = as.numeric(expt), y = (boot::inv.logit(true_sex_cond) - boot::inv.logit(true_base))), 
+            color = 'black', size = 1) +
+  scale_color_manual(values=c("cyan4", "darkgoldenrod1", "darkorchid1")) +
+  labs(x = "Experiment number", y = "Interaction Estimate", color = "Analysis Type") +
+  theme_minimal()
+```
+

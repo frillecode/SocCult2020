@@ -114,6 +114,7 @@ prepare_data_vectors <- function() {
   b_sex_cond_med <<- vector()
   b_sex_cond_upper <<- vector()
   b_sex_cond_error <<- vector()
+  pp_true <<- vector()
 }
 
 save_analysis_results_1 <- function(type) {
@@ -124,7 +125,6 @@ save_analysis_results_1 <- function(type) {
   true_cond <<- c(true_cond, rep(b_cond, n_experiments_per_repeat))
   true_sex_cond <<- c(true_sex_cond, rep(b_sex_cond, n_experiments_per_repeat))
   analysis_type <<- c(analysis_type, rep(type, n_experiments_per_repeat))
-  
 }
 
 save_results_meta <- function() {
@@ -134,11 +134,9 @@ save_results_meta <- function() {
                         true_base, b_base_lower, b_base_med, b_base_upper, b_base_error,
                         true_sex, b_sex_p_value, b_sex_lower, b_sex_med, b_sex_upper, b_sex_error,
                         true_cond, b_cond_p_value, b_cond_lower, b_cond_med, b_cond_upper, b_cond_error,
-                        true_sex_cond, b_sex_cond_p_value, b_sex_cond_lower, b_sex_cond_med, b_sex_cond_upper, b_sex_cond_error)
+                        true_sex_cond, b_sex_cond_p_value, b_sex_cond_lower, b_sex_cond_med, b_sex_cond_upper, b_sex_cond_error, pp_true)
   saved_results <<- results
-  rm(this_anova, this_data_set, model, ci, p_vals,
-     glmm, fe,
-     successes, np, nt,
+  rm(this_data_set, model,
      repeat_id, expt, analysis_type,
      true_base, b_base_lower, b_base_med, b_base_upper,
      true_sex, b_sex_p_value, b_sex_lower, b_sex_med, b_sex_upper,

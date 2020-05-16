@@ -37,7 +37,7 @@ create_datasets <- function() {
     temp_response <- vector()
     for (ppt in 1:n_participants_per_experiment) {
       lp <- b_base + participants$d_base[ppt] + b_sex*participants$sex[ppt] + b_cond*temp_condition[ppt] + b_sex_cond*participants$sex[ppt]*temp_condition[ppt]
-      prob <- exp(lp)/(1+exp(lp))               # ville det være lp man skulle scale i stedet????????
+      prob <- exp(lp)/(1+exp(lp))               
       temp_response[ppt] <- mean(runif(n_trials_per_participant, 0, 1) < prob)
     }
     response <- c(response, temp_response)
