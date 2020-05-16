@@ -1,7 +1,7 @@
 # SocCult2020
 Exam in Social and Cultural Dynamics spring 2020
 
-Code inspired by [hehehe](https://github.com/thomasmorgan/posterior-passing)
+Code inspired by https://github.com/thomasmorgan/posterior-passing.
 
 # Overview of code
 
