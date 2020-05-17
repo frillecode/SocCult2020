@@ -5,7 +5,7 @@ Exam in Social and Cultural Dynamics in Cognition spring 2020, Cognitive Science
 
 ### Overview of code
 
-To run simulation use thomas_main.R  
+To run simulation use main.R  
 To run plots use plots.rmd
 
 Code inspired by https://github.com/thomasmorgan/posterior-passing
