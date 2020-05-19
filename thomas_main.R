@@ -1,13 +1,13 @@
 # imports
 library(pacman)
-pacman::p_load(brms, tidyverse, boot)
+pacman::p_load(brms, dplyr, boot)
 source("util1.r")
 source("simulation.R")
 source("analysis1.r")
 
 
 #####
-number <- 21
+number <- 90
 
 
 ###            ###
@@ -26,7 +26,7 @@ number <- 21
 b_bases <- c(0)
 b_sexs <- c(0)
 b_conds <- c(0)
-b_sex_conds <- c(0.5)
+b_sex_conds <- c(0)
 var_bases <- c(0.5)
 var_sexs <- c(0)
 var_conds <- c(0)
@@ -38,7 +38,7 @@ var_sex_conds <- c(0)
 # Warning! n_participants_per_experiment and n_people need to 
 # be divisible by 4!
 n_repeats <- 1
-n_experiments_per_repeat <- 3
+n_experiments_per_repeat <- 60
 n_participants_per_experiment <- 80
 n_trials_per_participant <- 25
 n_people <- 100000
