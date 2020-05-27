@@ -1,14 +1,6 @@
----
-title: "plots"
-author: "Frida Hæstrup"
-date: "21/5/2020"
-output: 
-  md_document:
-    variant: markdown_github
----
+### Load Packages and Data
 
-### Load Packages and Data   
-```{r warnings=FALSE, message=FALSE}  
+``` r
 library(pacman)
 pacman::p_load(
   tidyverse,
@@ -19,21 +11,95 @@ pacman::p_load(
 ### Load data ###
 
 d000 <- read_csv("results/saved_results_000.csv")
-d001 <- read_csv("results/saved_results_1.csv") %>% mutate(repeat_id = 2)
-d002 <- read_csv("results/saved_results_2.csv") %>% mutate(repeat_id = 3) 
-d003 <- read_csv("results/saved_results_3.csv") %>% mutate(repeat_id = 4) 
-d004 <- read_csv("results/saved_results_4.csv") %>% mutate(repeat_id = 5)
-d100 <- read_csv("results/saved_results_100.csv")  
-d101 <- read_csv("results/saved_results_101.csv") %>% mutate(repeat_id = 2) 
-d102 <- read_csv("results/saved_results_102.csv") %>% mutate(repeat_id = 3) 
-d103 <- read_csv("results/saved_results_103.csv") %>% mutate(repeat_id = 4) 
-d104 <- read_csv("results/saved_results_104.csv") %>% mutate(repeat_id = 5) 
-d200 <- read_csv("results/saved_results_200.csv") 
-d201 <- read_csv("results/saved_results_201.csv") %>% mutate(repeat_id = 2) 
-d202 <- read_csv("results/saved_results_202.csv") %>% mutate(repeat_id = 3) 
-d203 <- read_csv("results/saved_results_203.csv") %>% mutate(repeat_id = 4) 
-d204 <- read_csv("results/saved_results_204.csv") %>% mutate(repeat_id = 5)  
+```
 
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d001 <- read_csv("results/saved_results_1.csv") %>% mutate(repeat_id = 2)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d002 <- read_csv("results/saved_results_2.csv") %>% mutate(repeat_id = 3) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d003 <- read_csv("results/saved_results_3.csv") %>% mutate(repeat_id = 4) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d004 <- read_csv("results/saved_results_4.csv") %>% mutate(repeat_id = 5)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d100 <- read_csv("results/saved_results_100.csv")  
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d101 <- read_csv("results/saved_results_101.csv") %>% mutate(repeat_id = 2) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d102 <- read_csv("results/saved_results_102.csv") %>% mutate(repeat_id = 3) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d103 <- read_csv("results/saved_results_103.csv") %>% mutate(repeat_id = 4) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d104 <- read_csv("results/saved_results_104.csv") %>% mutate(repeat_id = 5) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d200 <- read_csv("results/saved_results_200.csv") 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d201 <- read_csv("results/saved_results_201.csv") %>% mutate(repeat_id = 2) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d202 <- read_csv("results/saved_results_202.csv") %>% mutate(repeat_id = 3) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d203 <- read_csv("results/saved_results_203.csv") %>% mutate(repeat_id = 4) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+d204 <- read_csv("results/saved_results_204.csv") %>% mutate(repeat_id = 5)  
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
 d <- rbind(d000,d001,d002,d003,d004, 
            d100,d101,d102,d103,d104,
            d200,d201, d202,d203,d204) %>% 
@@ -41,21 +107,95 @@ d <- rbind(d000,d001,d002,d003,d004,
 
 #meta-analysis
 meta000 <- read_csv("results/meta_analysis_results_000.csv")
-meta001 <- read_csv("results/meta_analysis_results_1.csv") %>% mutate(meta_repeat_id = 2) 
-meta002 <- read_csv("results/meta_analysis_results_2.csv") %>% mutate(meta_repeat_id = 3)
-meta003 <- read_csv("results/meta_analysis_results_3.csv") %>% mutate(meta_repeat_id = 4)
-meta004 <- read_csv("results/meta_analysis_results_4.csv") %>% mutate(meta_repeat_id = 5) 
-meta100 <- read_csv("results/meta_analysis_results_100.csv") 
-meta101 <- read_csv("results/meta_analysis_results_101.csv") %>% mutate(meta_repeat_id = 2)
-meta102 <- read_csv("results/meta_analysis_results_102.csv") %>% mutate(meta_repeat_id = 3)
-meta103 <- read_csv("results/meta_analysis_results_103.csv") %>% mutate(meta_repeat_id = 4)
-meta104 <- read_csv("results/meta_analysis_results_104.csv") %>% mutate(meta_repeat_id = 5)
-meta200 <- read_csv("results/meta_analysis_results_200.csv") 
-meta201 <- read_csv("results/meta_analysis_results_201.csv") %>% mutate(meta_repeat_id = 2)
-meta202 <- read_csv("results/meta_analysis_results_202.csv") %>% mutate(meta_repeat_id = 3)
-meta203 <- read_csv("results/meta_analysis_results_203.csv") %>% mutate(meta_repeat_id = 4)
-meta204 <- read_csv("results/meta_analysis_results_204.csv") %>% mutate(meta_repeat_id = 5)
+```
 
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta001 <- read_csv("results/meta_analysis_results_1.csv") %>% mutate(meta_repeat_id = 2) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta002 <- read_csv("results/meta_analysis_results_2.csv") %>% mutate(meta_repeat_id = 3)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta003 <- read_csv("results/meta_analysis_results_3.csv") %>% mutate(meta_repeat_id = 4)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta004 <- read_csv("results/meta_analysis_results_4.csv") %>% mutate(meta_repeat_id = 5) 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta100 <- read_csv("results/meta_analysis_results_100.csv") 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta101 <- read_csv("results/meta_analysis_results_101.csv") %>% mutate(meta_repeat_id = 2)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta102 <- read_csv("results/meta_analysis_results_102.csv") %>% mutate(meta_repeat_id = 3)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta103 <- read_csv("results/meta_analysis_results_103.csv") %>% mutate(meta_repeat_id = 4)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta104 <- read_csv("results/meta_analysis_results_104.csv") %>% mutate(meta_repeat_id = 5)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta200 <- read_csv("results/meta_analysis_results_200.csv") 
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta201 <- read_csv("results/meta_analysis_results_201.csv") %>% mutate(meta_repeat_id = 2)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta202 <- read_csv("results/meta_analysis_results_202.csv") %>% mutate(meta_repeat_id = 3)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta203 <- read_csv("results/meta_analysis_results_203.csv") %>% mutate(meta_repeat_id = 4)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
+meta204 <- read_csv("results/meta_analysis_results_204.csv") %>% mutate(meta_repeat_id = 5)
+```
+
+    ## Warning: Missing column names filled in: 'X1' [1]
+
+``` r
 #merge data
 meta <- rbind(meta000,meta001,meta002,meta003,meta004,
               meta100,meta101,meta102, meta103,meta104,
@@ -69,13 +209,13 @@ meta <- rbind(meta000,meta001,meta002,meta003,meta004,
     b_sex_cond_error = b_sex_cond_error_meta,
     true_sex_cond = true_effect) %>% 
               select(-c(X1))  
-
 ```
 
+### Summary tables
 
-### Summary tables  
 APPENDIX 2
-```{r appendix_2}
+
+``` r
 # Summary of estimates from last pp
 d_last_pp <- d %>%  group_by(true_sex_cond, pb_true) %>% 
   filter(expt == max(expt), analysis_type == "pp", repeat_id == 1) %>%  #change repeat here
@@ -106,11 +246,11 @@ d_summarized <- rbind(d_last_pp, d_mean) %>%
 
 # Fix order
 d_summarized <- d_summarized[c(3, 2, 7, 1, 4, 5, 6, 8, 9, 10)]
-
 ```
 
 APPENDIX 3
-```{r appendix_3}
+
+``` r
 meta_pp <- meta %>% group_by(repeat_id) %>% rename(
     estimate = b_sex_cond,
     CI_lower = b_sex_cond_lower,
@@ -153,7 +293,8 @@ mean_meta_pp <- meta_pp %>%
 ```
 
 TABLE 3
-```{r table_3}
+
+``` r
 mean_pb_meta_pp <-  meta_pp %>% 
   group_by(pb_true, analysis_type) %>% 
   summarize(
@@ -165,11 +306,11 @@ mean_pb_meta_pp <-  meta_pp %>%
   )
 ```
 
+### Plots
 
+FIGURE 2
 
-### Plots  
-FIGURE 2   
-```{r figure_2}
+``` r
 # Remove data with publication bias
 d_pb0 <- d[d$pb_true == 0,]
 d_pb1 <- d[d$pb_true == 1,]
@@ -213,12 +354,13 @@ te2_pb0_plot <- ggplot(data =  d_pb0[d_pb0$true_sex_cond == 2,]) +
 # Arranging plots
 combined_te_pb0_plot <- te0_pb0_plot + te1_pb0_plot + te2_pb0_plot & theme(legend.position = "bottom")
 combined_te_pb0_plot + plot_layout(guides = "collect")
-
 ```
 
+![](plots_files/figure-markdown_github/figure_2-1.png)
 
 FIGURE 3
-```{r figure_3}
+
+``` r
 no_pb <- ggplot(data = meta_pp[meta_pp$pb_true == 0,]) + 
   geom_point(aes(x = repeat_id, y = dist, color = analysis_type, shape = as.factor(true_sex_cond)), size = 2) +
   geom_errorbar(aes(x = repeat_id, ymax = dist_upper, ymin = dist_lower, color = analysis_type, width = 0.2), alpha = 0.5, size = 0.8) +
@@ -245,9 +387,11 @@ pp_meta_plot <- no_pb + pb & theme(legend.position = "bottom")
 pp_meta_plot + plot_layout(guides = "collect") 
 ```
 
+![](plots_files/figure-markdown_github/figure_3-1.png)
 
 FIGURE 4
-```{r figure_4}
+
+``` r
 # Isolating pp data
 d_pp <- d[d$analysis_type == "pp",]
 
@@ -278,9 +422,6 @@ pp_pb1_plot <-
 # Arranging plots
 pp_pb_plot <- pp_pb0_plot + pp_pb1_plot & theme(legend.position = "bottom")
 pp_pb_plot + plot_layout(guides = "collect") 
-
 ```
 
-
-
-
+![](plots_files/figure-markdown_github/figure_4-1.png)

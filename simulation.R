@@ -44,15 +44,5 @@ create_datasets <- function() {
     rm(lp, prob, temp_response, temp_condition, sex_0_sample, sex_1_sample, dum)
   }
   return(data.frame(data_set, participant_id, sex, condition, response))
-  #data_sets$response_z <- scale(data_sets$response)              #??????????????????????????????
-  #library(ggplot2)
-  #ggplot(data = this_data_set, aes(x=response_z)) + geom_density()
-  #ggplot(data = this_data_set, aes(x=response)) + geom_density()
-  #hist(this_data_set$response_z)
-  #hist(data_sets$)
-}
 
-#mean(runif(10, 0, 1) < 0.7)
-#generates random uniform distribution from 0-1 with n number of observations. for each observation it checks
-#whether it is < prob and returns either true/false (corresponding to 1/0). then the mean is calculated of 
-#these 0s and 1s - e.g. mean 0.9 means 9 TRUE and 1 FALSE
+}

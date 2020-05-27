@@ -7,7 +7,7 @@ source("analysis1.r")
 
 
 #####
-number <- 90
+number <- 103 
 
 
 ###            ###
@@ -26,7 +26,7 @@ number <- 90
 b_bases <- c(0)
 b_sexs <- c(0)
 b_conds <- c(0)
-b_sex_conds <- c(0)
+b_sex_conds <- c(1) #0, 1, 2
 var_bases <- c(0.5)
 var_sexs <- c(0)
 var_conds <- c(0)
@@ -174,15 +174,11 @@ for (i in 1:length(b_bases)) {
   }
 } # end of parameter value for loops
 
-#meta_results <- compile_meta_results()
-#meta_results <- read.delim("meta_results_18_09_16.txt")
 
 #save results
 saved <- paste("Results/saved_results_", number, ".csv", sep = "") 
 meta_a <- paste("Results/meta_analysis_results_", number, ".csv", sep = "")
-#meta <- paste("Results/meta_results_", number, ".csv", sep = "")
 write.csv(saved_results_final, saved)
 write.csv(meta_analysis_final, meta_a)
-#write.csv(meta_results, meta)
 
-tidy_workspace()
+#tidy_workspace()
